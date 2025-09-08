@@ -33,7 +33,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-20.04
+          - ubuntu-24.04
         context:
           - name: python/3.10-slim
             target: root
@@ -48,10 +48,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v2.1.0
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -59,7 +59,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4.4.0
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
@@ -68,7 +68,7 @@ jobs:
             suffix=${{ matrix.context.suffix }}
 
       - name: Build Docker image
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.context.name }}
           push: ${{ github.event_name != 'pull_request' }}
